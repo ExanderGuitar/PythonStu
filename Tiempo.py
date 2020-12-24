@@ -18,14 +18,27 @@ class Tiempo():
         self.dia_anio = self.tiempo_org[7]
         self.directory = pl.Path.cwd()
 
-    def guardarTiempo(self, arch):
-        arch.write("#1\n")
-        for i in self.fecha:
-            arch.write("%s\n" % str(i))
-        for j in self.tiempo:
-            arch.write("%s\n" % str(j))
+    def guardar_tiempo(self):
+        self.arch = self.abrir_archivo("w")
 
-    def abrirArchivo(self):
+        for i in self.fecha:
+            self.arch.write("%s\n" % str(i))
+        for j in self.tiempo:
+            self.arch.write("%s\n" % str(j))
+
+        self.arch.close()
+
+    def cargar_tiempo(self):
+        self.arch = self.abrir_archivo("r")
+
+        for i in range(0,3):
+            self.fecha[i] = int(self.arch.readline())        
+        for j in range(0,3):
+            self.tiempo[j] = int(self.arch.readline())
+
+        self.arch.close()
+
+    def abrir_archivo(self, modo):
         try:
             open("SaveFile.txt")
         except:
@@ -36,8 +49,8 @@ class Tiempo():
                 pl.Path.cwd().joinpath("SaveFile.txt").touch()
                 print("File has been created at: ", pl.Path.cwd())
                 print("And now is open!")
-                self.archivo = open("SaveFile.txt", "w")
-                self.guardarTiempo(self.archivo)
+                self.archivo = open("SaveFile.txt", modo)
+                return self.archivo
             elif (self.entrada == "n" or self.entrada == "N"):
                 print("I need a file to store the data!") 
             else:
@@ -45,8 +58,8 @@ class Tiempo():
         else:
             print("SaveFile is in your current directory")
             print("SaveFile.txt opened!")
-            self.archivo = open("SaveFile.txt", "w")
-            self.guardarTiempo(self.archivo)
+            self.archivo = open("SaveFile.txt", modo)
+            return self.archivo
 
     def imprimirHora(self):
         print("%i:%i:%i" % (self.tiempo[0], self.tiempo[1], self.tiempo[2]))
