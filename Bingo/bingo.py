@@ -3,9 +3,17 @@ import Card_board as cb
 import Menu as menu
 
 main_loop_flag = True
+first_time_playing = True
+user_name = ""
 
 while main_loop_flag:
-    menu.main_menu()
+    
+    if first_time_playing:
+        menu.logo_program()
+        user_name = input("Dinos tu nombre: ")
+        first_time_playing = False
+
+    menu.main_menu(user_name)
     user_main_input = input("Cual es tu opcion: ")
 
     if user_main_input == "1":
